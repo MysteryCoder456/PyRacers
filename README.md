@@ -1,5 +1,5 @@
-# python-pygame-boilerplate
-This repository is made so that you do not need to do the tedious work of organizing and writing Pygame code used to setup your pygame projects.
+# PyRacers
+A Racing Game made in Python 3
 
-# How to use this repository?
-To use this repository, first install pygame either by running the command "pip install pygame" or by directly installing the ".whl" file from pygame.org if you're that cheap. Then, just clone it into a directory on your computer, then open it in your editor/IDE and you're ready to go.
+# How to Play?
+Just run `run_win.bat` if you're on Windows or run `run_unix.sh` if you're on Linux or MacOS
