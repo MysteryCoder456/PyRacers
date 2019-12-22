@@ -29,8 +29,13 @@ class PyRacers:
 
 
 
+
+
+
+
 	def start(self):
-		self.p1 = Car(self.width / 2, self.height / 2, (255, 0, 0))
+		self.p1 = Car(self.width / 2, self.height / 2 - 100, (255, 0, 0))
+		self.p2 = Car(self.width / 2, self.height / 2 + 100, (0, 0, 255))
 
 		self.friction = 0.97
 
@@ -40,15 +45,27 @@ class PyRacers:
 		acceleration = 0.6
 		brake_power = 0.917
 
-		if keys[pygame.K_LEFT]:
+		# Player 1 Controls
+		if keys[pygame.K_a]:
 			self.p1.rotate(-rotate_speed)
-		if keys[pygame.K_RIGHT]:
+		if keys[pygame.K_d]:
 			self.p1.rotate(rotate_speed)
 		
-		if keys[pygame.K_UP]:
+		if keys[pygame.K_w]:
 			self.p1.speed += acceleration
-		if keys[pygame.K_DOWN]:
+		if keys[pygame.K_s]:
 			self.p1.speed *= brake_power
+
+		# Player 2 Controls
+		if keys[pygame.K_LEFT]:
+			self.p2.rotate(-rotate_speed)
+		if keys[pygame.K_RIGHT]:
+			self.p2.rotate(rotate_speed)
+		
+		if keys[pygame.K_UP]:
+			self.p2.speed += acceleration
+		if keys[pygame.K_DOWN]:
+			self.p2.speed *= brake_power
 
 
 	def logic(self):
@@ -59,19 +76,33 @@ class PyRacers:
 				self.p1.y = self.p1.old_y
 				self.p1.speed = 0
 
+		for vertex in self.p2.vertices_cartesian:
+			if not self.win_rect.collidepoint(vertex[0], vertex[1]):
+				self.p2.x = self.p2.old_x
+				self.p2.y = self.p2.old_y
+				self.p2.speed = 0
+
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
+		self.p2.speed *= self.friction
 
 		# Update Car variables
 		self.p1.update()
+		self.p2.update()
 
 
 	def render(self, window):
 		self.win.fill(self.background)
 
 		self.p1.render(window)
+		self.p2.render(window)
 
 		pygame.display.update()
+
+
+
+
+
 
 
 
