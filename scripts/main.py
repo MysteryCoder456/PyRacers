@@ -1,5 +1,5 @@
 # Import modules
-from math import cos, sin, radians
+from math import cos, sin, radians, sqrt
 import pygame
 pygame.init()
 
@@ -9,7 +9,7 @@ from car import Car
 
 class PyRacers:
 	def __init__(self, width, height):
-		version = "v0.1alpha1"
+		version = "v0.1alpha2"
 
 		self.width = width
 		self.height = height
@@ -82,6 +82,17 @@ class PyRacers:
 				self.p2.y = self.p2.old_y
 				self.p2.speed = 0
 
+		# Handle collision between cars
+		mult = 0.7
+		if self.collide_circle(self.p1.x, self.p1.y, self.p1.vertex_distance*mult, self.p2.x, self.p2.y, self.p2.vertex_distance*mult):
+			self.p1.x = self.p1.old_x
+			self.p1.y = self.p1.old_y
+			self.p1.speed = 0
+
+			self.p2.x = self.p2.old_x
+			self.p2.y = self.p2.old_y
+			self.p2.speed = 0
+
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
 		self.p2.speed *= self.friction
@@ -99,7 +110,58 @@ class PyRacers:
 
 		pygame.display.update()
 
+	
 
+
+
+
+
+
+
+	# ################################
+	# ###### GAMEPLAY FUNCTIONS ######
+	# ################################
+
+	@staticmethod
+	def dist(x1, y1, x2, y2):
+		"""Returns the distance between two points using the Pythagorean Theorem.
+		a^2 + b^2 = c^2
+		
+		Arguments:
+			x1 {int} -- x coordinate of first point
+			y1 {int} -- x coordinate of first point
+			x2 {int} -- x coordinate of second point
+			y2 {int} -- y coordinate of second point
+
+		Returns:
+			int -- Distance between the points.
+		"""
+
+		a = x1 - x2
+		b = y1 - y2
+		c = sqrt((a**2) + (b**2))
+		return c
+
+	@staticmethod
+	def collide_circle(x1, y1, r1, x2, y2, r2):
+		"""Finds out whether two circle are colliding or not.
+		
+		Arguments:
+			x1 {int} -- x coordinate of center of first circle
+			y1 {int} -- y coordinate of center of first circle
+			r1 {int} -- radius of first circle
+			x2 {int} -- x coordinate of center of second circle
+			y2 {int} -- y coordinate of center of second circle
+			r2 {int} -- radius of second circle
+		
+		Returns:
+			bool -- Whether the circles are colliding or not.
+		"""
+
+		d = PyRacers.dist(x1, y1, x2, y2)
+
+		if d <= r1 + r2:
+			return True
 
 
 

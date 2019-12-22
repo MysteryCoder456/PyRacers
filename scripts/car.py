@@ -22,6 +22,7 @@ class Car:
 		self.v_angle3 = 180 - vertex_angle
 		self.v_angle4 = 180 + vertex_angle
 
+		# Vertices in Polar Coordinate format for easier rotation 
 		self.vertices_polar = [
 			(self.v_angle1 + self.hdg, self.vertex_distance),
 			(self.v_angle2 + self.hdg, self.vertex_distance),
