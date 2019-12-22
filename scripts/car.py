@@ -15,9 +15,10 @@ class Car:
 
 		self.vertex_distance = 35
 		vertex_angle = 32
+		forward_bend = 8
 
-		self.v_angle1 = -vertex_angle
-		self.v_angle2 = vertex_angle
+		self.v_angle1 = -vertex_angle + forward_bend
+		self.v_angle2 = vertex_angle - forward_bend
 		self.v_angle3 = 180 - vertex_angle
 		self.v_angle4 = 180 + vertex_angle
 
@@ -55,29 +56,19 @@ class Car:
 			(self.v_angle4 + self.hdg, self.vertex_distance)
 		)
 
-		# TODO: Simplify this code
+		self.vertices_cartesian = []
+
 		# Conversion of Polar Coordinates to Cartesian Coordinates for rendering
-		x1 = cos(radians(self.vertices_polar[0][0])) * self.vertices_polar[0][1] + self.x
-		y1 = sin(radians(self.vertices_polar[0][0])) * self.vertices_polar[0][1] + self.y
-
-		x2 = cos(radians(self.vertices_polar[1][0])) * self.vertices_polar[1][1] + self.x
-		y2 = sin(radians(self.vertices_polar[1][0])) * self.vertices_polar[1][1] + self.y
-
-		x3 = cos(radians(self.vertices_polar[2][0])) * self.vertices_polar[2][1] + self.x
-		y3 = sin(radians(self.vertices_polar[2][0])) * self.vertices_polar[2][1] + self.y
-
-		x4 = cos(radians(self.vertices_polar[3][0])) * self.vertices_polar[3][1] + self.x
-		y4 = sin(radians(self.vertices_polar[3][0])) * self.vertices_polar[3][1] + self.y
-
-		self.vertices_cartesian = [
-			(x1, y1),
-			(x2, y2),
-			(x3, y3),
-			(x4, y4)
-		]
+		for vertex in self.vertices_polar:
+			x = cos(radians(vertex[0])) * vertex[1] + self.x
+			y = sin(radians(vertex[0])) * vertex[1] + self.y
+			self.vertices_cartesian.append((x, y))
 
 	def render(self, window):
-		# TODO: Render car tires
-
 		# Render Car
 		pygame.draw.polygon(window, self.color, self.vertices_cartesian)
+
+		# Render car tires
+		tire_radius = self.vertex_distance * 0.2
+		for vertex in self.vertices_cartesian:
+			pygame.draw.ellipse(window, (0, 0, 0), (vertex[0]-tire_radius, vertex[1]-tire_radius, tire_radius * 2, tire_radius * 2))
