@@ -37,7 +37,7 @@ class PyRacers:
 		self.p1 = Car(self.width / 2, self.height / 2 - 100, (255, 0, 0))
 		self.p2 = Car(self.width / 2, self.height / 2 + 100, (0, 0, 255))
 
-		self.friction = 0.975
+		self.friction = 0.97
 
 
 	def input(self, keys):
