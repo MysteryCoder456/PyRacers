@@ -11,14 +11,14 @@ class PyRacers:
 	def __init__(self, width, height):
 		version = "v0.1alpha2"
 
+		icon = pygame.image.load("icon.png")
+		pygame.display.set_icon(icon)
+
 		self.width = width
 		self.height = height
 		self.win = pygame.display.set_mode((width, height))
 		pygame.display.set_caption("PyRacers " + version)
 		self.win_rect = pygame.Rect(0, 0, width, height)
-
-		icon = pygame.image.load("icon.png")
-		pygame.display.set_icon(icon)
 
 		self.clock = pygame.time.Clock()
 		self.running = True

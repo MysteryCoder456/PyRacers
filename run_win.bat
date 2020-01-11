@@ -1,2 +1,4 @@
 pip3 install pygame
-python3 scripts/main.py
+cls
+cd scripts
+python3 main.py
