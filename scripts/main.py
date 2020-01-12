@@ -74,15 +74,18 @@ class PyRacers:
 		# Handle collision between cars and walls
 		for vertex in self.p1.vertices_cartesian:
 			if not self.win_rect.collidepoint(vertex[0], vertex[1]):
-				self.p1.x = self.p1.old_x
-				self.p1.y = self.p1.old_y
-				self.p1.speed = 0
+				self.p1.handle_collision()
 
 		for vertex in self.p2.vertices_cartesian:
 			if not self.win_rect.collidepoint(vertex[0], vertex[1]):
-				self.p2.x = self.p2.old_x
-				self.p2.y = self.p2.old_y
-				self.p2.speed = 0
+				self.p2.handle_collision()
+
+		# Handle collision between cars
+		for line1 in self.p1.collider_lines:
+			for line2 in self.p2.collider_lines:
+				if self.collide_line(line1, line2):
+					self.p1.handle_collision()
+					self.p2.handle_collision()
 
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
@@ -91,13 +94,6 @@ class PyRacers:
 		# Update Car variables
 		self.p1.update()
 		self.p2.update()
-
-		# Handle collision between cars
-		for line1 in self.p1.collider_lines:
-			for line2 in self.p2.collider_lines:
-				if self.collide_line(line1, line2):
-					self.p1.handle_collision()
-					self.p2.handle_collision()
 
 
 	def render(self, window):
