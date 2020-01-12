@@ -22,7 +22,19 @@ class Car:
 		self.v_angle3 = 180 - vertex_angle
 		self.v_angle4 = 180 + vertex_angle
 
-		# Vertices in Polar Coordinate format for easier rotation 
+		self.vertices_polar = []
+
+		self.vertices_cartesian = []
+
+		self.color = color
+		self.tire_width = 10
+		self.tire_height = 26
+
+		self.collider_lines = []
+
+	
+	def update_vertices(self):
+		# Vertices in Polar Coordinates for easier rotation 
 		self.vertices_polar = [
 			(self.v_angle1 + self.hdg, self.vertex_distance),
 			(self.v_angle2 + self.hdg, self.vertex_distance),
@@ -32,12 +44,32 @@ class Car:
 
 		self.vertices_cartesian = []
 
-		self.color = color
-		self.tire_width = 10
-		self.tire_height = 26
+		# Conversion of Polar Coordinates to Cartesian Coordinates for rendering
+		for vertex in self.vertices_polar:
+			x = cos(radians(vertex[0])) * vertex[1] + self.x
+			y = sin(radians(vertex[0])) * vertex[1] + self.y
+			self.vertices_cartesian.append((x, y))
+
+
+	def update_colliders(self):
+		v = self.vertices_cartesian
+		self.collider_lines = []
+		
+		for i in range(len(v)):
+			if i == len(v) - 1:
+				point1 = (v[i][0], v[i][1])
+				point2 = (v[0][0], v[0][1])
+			else:
+				point1 = (v[i][0], v[i][1])
+				point2 = (v[i+1][0], v[i+1][1])
+
+			line = (point1, point2)
+			self.collider_lines.append(line)
+
 
 	def rotate(self, angle):
 		self.hdg += angle
+
 
 	def update(self):
 		self.old_x = self.x
@@ -49,21 +81,9 @@ class Car:
 		self.x += self.x_vel
 		self.y += self.y_vel
 
-		# Vertices in Polar Coordinate format for easier rotation 
-		self.vertices_polar = (
-			(self.v_angle1 + self.hdg, self.vertex_distance),
-			(self.v_angle2 + self.hdg, self.vertex_distance),
-			(self.v_angle3 + self.hdg, self.vertex_distance),
-			(self.v_angle4 + self.hdg, self.vertex_distance)
-		)
+		self.update_vertices()
+		self.update_colliders()
 
-		self.vertices_cartesian = []
-
-		# Conversion of Polar Coordinates to Cartesian Coordinates for rendering
-		for vertex in self.vertices_polar:
-			x = cos(radians(vertex[0])) * vertex[1] + self.x
-			y = sin(radians(vertex[0])) * vertex[1] + self.y
-			self.vertices_cartesian.append((x, y))
 
 	def render(self, window):
 		# Render Car
