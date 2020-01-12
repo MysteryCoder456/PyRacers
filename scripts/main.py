@@ -5,6 +5,7 @@ pygame.init()
 
 # Import classes
 from car import Car
+from racetrack import RaceTrack
 
 
 class PyRacers:
@@ -34,8 +35,45 @@ class PyRacers:
 
 
 	def start(self):
-		self.p1 = Car(self.width / 2, self.height / 2 - 100, (255, 0, 0))
-		self.p2 = Car(self.width / 2, self.height / 2 + 100, (0, 98, 255))
+		self.p1 = Car(105, self.height / 2, (200, 0, 0))
+		self.p2 = Car(200, self.height / 2, (0, 98, 255))
+		self.p1.hdg, self.p2.hdg = -90, -90
+
+		track1_points = (
+			# Inner Points
+			(
+				(250, 350),
+				(270, 408),
+				(360, 460),
+				(512, 475),
+				(self.width - 360, 460),
+				(self.width - 270, 408),
+				(self.width - 250, 350),
+				(self.width - 270, self.height - 408),
+				(self.width - 360, self.height - 460),
+				(512, self.height - 475),
+				(360, self.height - 460),
+				(270, self.height - 408)
+			),
+
+			# Outer Points
+			(
+				(50, 350),
+				(100, 540),
+				(239, 637),
+				(512, 650),
+				(self.width - 239, 637),
+				(self.width - 100, 540),
+				(self.width - 50, 350),
+				(self.width - 100, self.height - 540),
+				(self.width - 239, self.height - 637),
+				(512, self.height - 650),
+				(239, self.height - 637),
+				(100, self.height - 540)
+			)
+		)
+
+		self.track1 = RaceTrack(track1_points[0], track1_points[1])
 
 		self.friction = 0.975
 
@@ -87,6 +125,8 @@ class PyRacers:
 					self.p1.handle_collision()
 					self.p2.handle_collision()
 
+		# TODO: Handle Collisions Between Cars and RaceTrack
+
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
 		self.p2.speed *= self.friction
@@ -98,6 +138,8 @@ class PyRacers:
 
 	def render(self, window):
 		self.win.fill(self.background)
+
+		self.track1.render(window, self.background)
 
 		self.p1.render(window)
 		self.p2.render(window)

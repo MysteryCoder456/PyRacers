@@ -5,7 +5,9 @@ class RaceTrack:
     def __init__(self, inner_points, outer_points):
         self.inner_points = inner_points
         self.outer_points = outer_points
-        self.color = (0, 0, 0)
+        self.color = (70, 70, 70)
+
+        self.collider_lines = []
 
     def render(self, window, background):
         pygame.draw.polygon(window, self.color, self.outer_points)
