@@ -1,5 +1,5 @@
 # Import modules
-from math import cos, sin, radians, sqrt
+from math import cos, sin, radians, sqrt, atan2
 import pygame
 pygame.init()
 
@@ -82,17 +82,6 @@ class PyRacers:
 				self.p2.y = self.p2.old_y
 				self.p2.speed = 0
 
-		# Handle collision between cars
-		mult = 0.7
-		if self.collide_circle(self.p1.x, self.p1.y, self.p1.vertex_distance*mult, self.p2.x, self.p2.y, self.p2.vertex_distance*mult):
-			self.p1.x = self.p1.old_x
-			self.p1.y = self.p1.old_y
-			self.p1.speed = 0
-
-			self.p2.x = self.p2.old_x
-			self.p2.y = self.p2.old_y
-			self.p2.speed = 0
-
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
 		self.p2.speed *= self.friction
@@ -100,6 +89,13 @@ class PyRacers:
 		# Update Car variables
 		self.p1.update()
 		self.p2.update()
+
+		# Handle collision between cars
+		for line1 in self.p1.collider_lines:
+			for line2 in self.p2.collider_lines:
+				if self.collide_line(line1, line2):
+					self.p1.handle_collision()
+					self.p2.handle_collision()
 
 
 	def render(self, window):
@@ -110,17 +106,14 @@ class PyRacers:
 
 		pygame.display.update()
 
+
 	
-
-
-
-
-
 
 
 	# ################################
 	# ###### GAMEPLAY FUNCTIONS ######
 	# ################################
+
 
 	@staticmethod
 	def dist(x1, y1, x2, y2):
@@ -141,6 +134,7 @@ class PyRacers:
 		b = y1 - y2
 		c = sqrt((a**2) + (b**2))
 		return c
+
 
 	@staticmethod
 	def collide_circle(x1, y1, r1, x2, y2, r2):
@@ -164,11 +158,46 @@ class PyRacers:
 			return True
 
 
+	@staticmethod
+	def collide_line(line1, line2):
+		"""Checks whether two lines are colliding or not
+		
+		Arguments:
+			line1 {list} -- Coordinates of first line
+			line2 {list} -- Coordinates of second line
+		
+		Returns:
+			bool -- Whether or not the two lines collided
+		"""
+
+		# Huge kudos to David Gouviea on https://gamedev.stackexchange.com/ for this algorithm
+
+		a = line1[0]
+		b = line1[1]
+		c = line2[0]
+		d = line2[1]
+
+		denominator = ((b[0] - a[0]) * (d[1] - c[1])) - ((b[1] - a[1]) * (d[0] - c[0]))
+		numerator1 = ((a[1] - c[1]) * (d[0] - c[0])) - ((a[0] - c[0]) * (d[1] - c[1]))
+		numerator2 = ((a[1] - c[1]) * (b[0] - a[0])) - ((a[0] - c[0]) * (b[1] - a[1]))
+
+		# Detect coincident lines
+		if (denominator == 0): return True # (numerator1 == 0 and numerator2 == 0) This condition causes some problems
+
+		r = numerator1 / denominator
+		s = numerator2 / denominator
+
+		return (r >= 0 and r <= 1) and (s >= 0 and s <= 1)
 
 
 
 
 
+
+
+
+
+# DO NOT TOUCH THIS CODE UNLESS ABSOLUTELY NEEDED!! #
 
 
 def main():

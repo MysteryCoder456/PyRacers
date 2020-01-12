@@ -32,6 +32,12 @@ class Car:
 
 		self.collider_lines = []
 
+
+	def handle_collision(self):
+		self.x = self.old_x
+		self.y = self.old_y
+		self.speed = 0
+
 	
 	def update_vertices(self):
 		# Vertices in Polar Coordinates for easier rotation 
@@ -74,6 +80,7 @@ class Car:
 	def update(self):
 		self.old_x = self.x
 		self.old_y = self.y
+		self.old_hdg = self.hdg
 
 		self.x_vel = cos(radians(self.hdg)) * self.speed
 		self.y_vel = sin(radians(self.hdg)) * self.speed
