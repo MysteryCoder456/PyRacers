@@ -35,14 +35,14 @@ class PyRacers:
 
 	def start(self):
 		self.p1 = Car(self.width / 2, self.height / 2 - 100, (255, 0, 0))
-		self.p2 = Car(self.width / 2, self.height / 2 + 100, (0, 0, 255))
+		self.p2 = Car(self.width / 2, self.height / 2 + 100, (0, 98, 255))
 
 		self.friction = 0.975
 
 
 	def input(self, keys):
 		rotate_speed = 3.4
-		acceleration = 0.6
+		acceleration = Car(0, 0, False).vertex_distance / 100
 		brake_power = 0.917
 
 		# Player 1 Controls
@@ -69,6 +69,8 @@ class PyRacers:
 
 
 	def logic(self):
+		print(pygame.mouse.get_pos())
+
 		# Handle collision between cars and walls
 		for vertex in self.p1.vertices_cartesian:
 			if not self.win_rect.collidepoint(vertex[0], vertex[1]):
@@ -182,7 +184,7 @@ class PyRacers:
 		numerator2 = ((a[1] - c[1]) * (b[0] - a[0])) - ((a[0] - c[0]) * (b[1] - a[1]))
 
 		# Detect coincident lines
-		if (denominator == 0): return True # (numerator1 == 0 and numerator2 == 0) This condition causes some problems
+		if (denominator == 0): return (numerator1 == 0 and numerator2 == 0) # This condition causes some problems
 
 		r = numerator1 / denominator
 		s = numerator2 / denominator
@@ -201,7 +203,7 @@ class PyRacers:
 
 
 def main():
-	game = PyRacers(1024, 720)
+	game = PyRacers(1024, 700)
 	game.start()
 
 	while game.running:

@@ -1,6 +1,7 @@
 import pygame
 from math import cos, sin, radians
 
+
 class Car:
 	def __init__(self, x, y, color):
 		self.x = x
@@ -13,7 +14,7 @@ class Car:
 		self.hdg = 0
 		self.speed = 0
 
-		self.vertex_distance = 35
+		self.vertex_distance = 20
 		vertex_angle = 32
 		forward_bend = 8
 
