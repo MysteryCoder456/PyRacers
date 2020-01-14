@@ -37,7 +37,7 @@ class Car:
 	def handle_collision(self):
 		self.x = self.old_x
 		self.y = self.old_y
-		self.speed = 0
+		self.speed *= -2
 
 	
 	def update_vertices(self):

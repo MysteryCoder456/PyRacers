@@ -37,7 +37,7 @@ class PyRacers:
 	def start(self):
 		self.p1 = Car(105, self.height / 2, (200, 0, 0))
 		self.p2 = Car(200, self.height / 2, (0, 98, 255))
-		self.p1.hdg, self.p2.hdg = -90, -90
+		self.p1.hdg, self.p2.hdg = -91, -89
 
 		track1_points = (
 			# Inner Points
@@ -75,19 +75,19 @@ class PyRacers:
 
 		self.track1 = RaceTrack(track1_points[0], track1_points[1])
 
-		self.friction = 0.975
+		self.friction = 0.98
 
 
 	def input(self, keys):
-		rotate_speed = 3.4
+		rotate_speed = 0.34
 		acceleration = Car(0, 0, False).vertex_distance / 100
 		brake_power = 0.917
 
 		# Player 1 Controls
 		if keys[pygame.K_a]:
-			self.p1.rotate(-rotate_speed)
+			self.p1.rotate(-rotate_speed * self.p1.speed)
 		if keys[pygame.K_d]:
-			self.p1.rotate(rotate_speed)
+			self.p1.rotate(rotate_speed * self.p1.speed)
 		
 		if keys[pygame.K_w]:
 			self.p1.speed += acceleration
@@ -96,9 +96,9 @@ class PyRacers:
 
 		# Player 2 Controls
 		if keys[pygame.K_LEFT]:
-			self.p2.rotate(-rotate_speed)
+			self.p2.rotate(-rotate_speed * self.p2.speed)
 		if keys[pygame.K_RIGHT]:
-			self.p2.rotate(rotate_speed)
+			self.p2.rotate(rotate_speed * self.p2.speed)
 		
 		if keys[pygame.K_UP]:
 			self.p2.speed += acceleration
@@ -107,7 +107,8 @@ class PyRacers:
 
 
 	def logic(self):
-		print(pygame.mouse.get_pos())
+		# print(pygame.mouse.get_pos())
+		# print(self.p2.speed)
 
 		# Handle collision between cars and walls
 		for vertex in self.p1.vertices_cartesian:
