@@ -1,4 +1,4 @@
-pip3 install pygame --pre
+pip3 install pygame
 clear
 cd scripts
 python3 main.py
