@@ -12,7 +12,7 @@ class PyRacers:
 	def __init__(self, width, height):
 		version = "v0.1alpha3"
 
-		icon = pygame.image.load("icon.png")
+		icon = pygame.image.load("../icon.png")
 		pygame.display.set_icon(icon)
 
 		self.width = width
