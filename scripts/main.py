@@ -10,7 +10,7 @@ from racetrack import RaceTrack
 
 class PyRacers:
 	def __init__(self, width, height):
-		version = "v0.1alpha2"
+		version = "v0.1alpha3"
 
 		icon = pygame.image.load("icon.png")
 		pygame.display.set_icon(icon)
@@ -81,7 +81,7 @@ class PyRacers:
 	def input(self, keys):
 		rotate_speed = 0.34
 		acceleration = Car(0, 0, False).vertex_distance / 100
-		brake_power = 0.917
+		reverse_acceleration = Car(0, 0, False).vertex_distance / -300
 
 		# Player 1 Controls
 		if keys[pygame.K_a]:
@@ -92,7 +92,7 @@ class PyRacers:
 		if keys[pygame.K_w]:
 			self.p1.speed += acceleration
 		if keys[pygame.K_s]:
-			self.p1.speed *= brake_power
+			self.p1.speed += reverse_acceleration
 
 		# Player 2 Controls
 		if keys[pygame.K_LEFT]:
@@ -103,7 +103,7 @@ class PyRacers:
 		if keys[pygame.K_UP]:
 			self.p2.speed += acceleration
 		if keys[pygame.K_DOWN]:
-			self.p2.speed *= brake_power
+			self.p2.speed += reverse_acceleration
 
 
 	def logic(self):
@@ -126,7 +126,26 @@ class PyRacers:
 					self.p1.handle_collision()
 					self.p2.handle_collision()
 
-		# TODO: Handle Collisions Between Cars and RaceTrack
+		# Handle Collisions Between Cars and RaceTrack
+		# Player 1
+		for line1 in self.p1.collider_lines:
+			for line2 in self.track1.inner_collider_lines:
+				if self.collide_line(line1, line2):
+					self.p1.handle_collision()
+
+			for line2 in self.track1.outer_collider_lines:
+				if self.collide_line(line1, line2):
+					self.p1.handle_collision()
+
+		# Player 2
+		for line1 in self.p2.collider_lines:
+			for line2 in self.track1.inner_collider_lines:
+				if self.collide_line(line1, line2):
+					self.p2.handle_collision()
+
+			for line2 in self.track1.outer_collider_lines:
+				if self.collide_line(line1, line2):
+					self.p2.handle_collision()
 
 		# Apply Friction to Cars
 		self.p1.speed *= self.friction
