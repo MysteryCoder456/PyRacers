@@ -80,7 +80,7 @@ class PyRacers:
 
 	def input(self, keys):
 		rotate_speed = 0.34
-		acceleration = Car(0, 0, False).vertex_distance / 100
+		acceleration = Car(0, 0, False).vertex_distance / 120
 		reverse_acceleration = Car(0, 0, False).vertex_distance / -300
 
 		# Player 1 Controls
