@@ -3,9 +3,10 @@ from math import cos, sin, radians, sqrt, atan2
 import pygame
 pygame.init()
 
-# Import classes
+# Import classes and variables
 from car import Car
 from racetrack import RaceTrack
+import trackpoints as tp
 
 
 class PyRacers:
@@ -26,6 +27,7 @@ class PyRacers:
 		self.FPS = 60
 		self.background = (200, 200, 200)
 
+		tp.set_dimensions(self.width, self.height)
 
 
 
@@ -39,41 +41,7 @@ class PyRacers:
 		self.p2 = Car(200, self.height / 2, (0, 98, 255))
 		self.p1.hdg, self.p2.hdg = -91, -89
 
-		track1_points = (
-			# Inner Points
-			(
-				(250, 350),
-				(270, 408),
-				(360, 460),
-				(512, 475),
-				(self.width - 360, 460),
-				(self.width - 270, 408),
-				(self.width - 250, 350),
-				(self.width - 270, self.height - 408),
-				(self.width - 360, self.height - 460),
-				(512, self.height - 475),
-				(360, self.height - 460),
-				(270, self.height - 408)
-			),
-
-			# Outer Points
-			(
-				(50, 350),
-				(100, 540),
-				(239, 637),
-				(512, 650),
-				(self.width - 239, 637),
-				(self.width - 100, 540),
-				(self.width - 50, 350),
-				(self.width - 100, self.height - 540),
-				(self.width - 239, self.height - 637),
-				(512, self.height - 650),
-				(239, self.height - 637),
-				(100, self.height - 540)
-			)
-		)
-
-		self.track1 = RaceTrack(track1_points[0], track1_points[1])
+		self.t1 = RaceTrack(tp.get_track1()[0], tp.get_track1()[1])
 
 		self.friction = 0.98
 
@@ -129,21 +97,21 @@ class PyRacers:
 		# Handle Collisions Between Cars and RaceTrack
 		# Player 1
 		for line1 in self.p1.collider_lines:
-			for line2 in self.track1.inner_collider_lines:
+			for line2 in self.t1.inner_collider_lines:
 				if self.collide_line(line1, line2):
 					self.p1.handle_collision()
 
-			for line2 in self.track1.outer_collider_lines:
+			for line2 in self.t1.outer_collider_lines:
 				if self.collide_line(line1, line2):
 					self.p1.handle_collision()
 
 		# Player 2
 		for line1 in self.p2.collider_lines:
-			for line2 in self.track1.inner_collider_lines:
+			for line2 in self.t1.inner_collider_lines:
 				if self.collide_line(line1, line2):
 					self.p2.handle_collision()
 
-			for line2 in self.track1.outer_collider_lines:
+			for line2 in self.t1.outer_collider_lines:
 				if self.collide_line(line1, line2):
 					self.p2.handle_collision()
 
@@ -159,7 +127,7 @@ class PyRacers:
 	def render(self, window):
 		self.win.fill(self.background)
 
-		self.track1.render(window, self.background)
+		self.t1.render(window, self.background)
 
 		self.p1.render(window)
 		self.p2.render(window)
